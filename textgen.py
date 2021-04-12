@@ -13,7 +13,7 @@ def get_texts(book):
         if sentence == sentences[-1]:
             current_text.append(sentence)
             texts.append('.'.join(current_text))
-        elif len(words) <= word_limit:
+        elif len(words) <= word_limit and sum([len(w) for w in words]) <= 980:
             current_text.append(sentence)
         else:
             texts.append('.'.join(current_text))
