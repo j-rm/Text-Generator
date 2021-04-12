@@ -63,7 +63,8 @@ def complexity(text):
     """Returns the complexity of the given text by adding up the frequencies of all its words."""
     words = text.split(' ')
     freqs = list(map(frequency, words))
-    return sum(freqs) / (len(frequency_list) - len(list(map(lambda f: f == 0, freqs ))))
+    missing_words = [w for w in words if frequency(w) == 0]
+    return sum(freqs) / (len(frequency_list) - len(missing_words))
 
 #Float -> String
 def difficulty(score):
