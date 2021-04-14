@@ -2,25 +2,11 @@ import string, os, json
 from typing import TextIO
 
 def get_texts(book: TextIO) -> list:
-    """Returns a list of all the 100 words long texts from the given book file."""
+    """Returns a list of all 970 characters long texts from the given book file."""
     content = book.read()
-    texts = []
-    current_text = []
-    word_limit = 130
-    sentences = content.split('.')
-    for sentence in sentences:
-        words = '.'.join(current_text).split(' ')
-        if sentence == sentences[-1]:
-            current_text.append(sentence)
-            texts.append('.'.join(current_text))
-        elif len(words) <= word_limit:
-            current_text.append(sentence)
-        else:
-            texts.append('.'.join(current_text))
-            texts[-1] += '.'
-            current_text = []
-            current_text.append(sentence)
-    return texts
+    chars_limit = 970
+    texts = [content[i:i + chars_limit] for i in range(0, len(content), chars_limit)]
+    return ["..." + t + "..." if t != texts[0] else t + "..." for t in texts]
 
 def remove_punctuation(word: str) -> str:
     "Removes any leading spaces or punctuation from the given word."
@@ -42,24 +28,11 @@ def frequency(w: str) -> float:
     """Returns the frequency of the given word by looking it up in the dictionary of words and their frequencies, frequency_list"""
     return frequency_list.get(remove_punctuation(w), 0)
 
-def complexity2(text:str) -> float:
-    """Returns the complexity of the given text by adding up the frequencies of all its words."""
-    words = text.split(' ')
-    missing, sum = 0, 0
-    for w in words:
-        freq = frequency(w)
-        if freq != 0:
-            sum += freq
-        else:
-            missing += 1
-    return sum / (len(frequency_list) - missing)
-
 def complexity(text:str) -> float:
     """Returns the complexity of the given text by adding up the frequencies of all its words."""
     words = text.split(' ')
-    freqs = list(map(frequency, words))
-    missing_words = [w for w in words if frequency(w) == 0]
-    return sum(freqs) / (len(frequency_list) - len(missing_words))
+    freqs = [frequency(w) for w in words]
+    return sum(freqs) / (len(frequency_list) - freqs.count(0))  #sum of the frequencies / all the words that were in the list
 
 def difficulty(score: float) -> str:
     """Returns the difficulty category of score. It can be one of: Easy, Medium or Hard."""
