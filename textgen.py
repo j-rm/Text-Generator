@@ -1,7 +1,6 @@
 import string, os, json
 from typing import TextIO
 
-#File -> List
 def get_texts(book: TextIO) -> list:
     """Returns a list of all the 100 words long texts from the given book file."""
     content = book.read()
@@ -23,12 +22,10 @@ def get_texts(book: TextIO) -> list:
             current_text.append(sentence)
     return texts
 
-#String -> String
 def remove_punctuation(word: str) -> str:
     "Removes any leading spaces or punctuation from the given word."
     return word.strip().strip(string.punctuation)
 
-#File -> Dictionary
 def word_frequencies(word_list: TextIO) -> dict:
     """Returns a dictionary where each key-value pair is a word and its frequency in frequency list of words.  """
     words = word_list.read().split(' ')
@@ -41,12 +38,10 @@ def word_frequencies(word_list: TextIO) -> dict:
     del frequencies[""]
     return frequencies
 
-#String -> Float
 def frequency(w: str) -> float:
     """Returns the frequency of the given word by looking it up in the dictionary of words and their frequencies, frequency_list"""
     return frequency_list.get(remove_punctuation(w), 0)
 
-#String -> Float
 def complexity2(text:str) -> float:
     """Returns the complexity of the given text by adding up the frequencies of all its words."""
     words = text.split(' ')
@@ -59,7 +54,6 @@ def complexity2(text:str) -> float:
             missing += 1
     return sum / (len(frequency_list) - missing)
 
-#String -> Float
 def complexity(text:str) -> float:
     """Returns the complexity of the given text by adding up the frequencies of all its words."""
     words = text.split(' ')
@@ -67,7 +61,6 @@ def complexity(text:str) -> float:
     missing_words = [w for w in words if frequency(w) == 0]
     return sum(freqs) / (len(frequency_list) - len(missing_words))
 
-#Float -> String
 def difficulty(score: float) -> str:
     """Returns the difficulty category of score. It can be one of: Easy, Medium or Hard."""
     if score <= 0.000055:
@@ -77,19 +70,15 @@ def difficulty(score: float) -> str:
     else:
         return "Hard"
 
-
-#String -> List
 def keywords(text:str) -> list:
     """Returns a list of 5 keywords from the given text."""
     return sorted(set(text.split(' ')), key=frequency, reverse=True)[0:5]
 
-#String -> Float
 def coverage(text: str) -> float:
     """Returns the percentage of (unique) words from the given text that are in the frequency list."""
     words = set(text.split(' '))
     return len([w for w in words if frequency(w) != 0]) / len(words) * 100
 
-#File -> List
 def categorize(book: TextIO) -> list:
     """Returns a list with all the 100 words long texts from the given book along with their difficulties and keywords."""
     chunks = get_texts(book)
@@ -99,13 +88,11 @@ def categorize(book: TextIO) -> list:
         texts.append((t, level, keywords(t)))
     return texts
 
-#Dict -> None
 def save_frequencies(freqs: dict) -> None:
     """Stores the given frequency list in a file ('freq_list')."""
     with open("freq_list", 'w') as stored_freq_list:
         json.dump(freqs, stored_freq_list)
 
-#None -> Dict
 def load_frequencies() -> dict:
     """Loads the frequency list stored in a file ('freq_list') and returns it."""
     with open("freq_list", 'r') as stored_freq_list:
