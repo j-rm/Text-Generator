@@ -47,6 +47,9 @@ def keywords(text:str) -> list:
     """Returns a list of 5 keywords from the given text."""
     return sorted(set(text.split(' ')), key=frequency, reverse=True)[0:5]
 
+def possible_keywords(text:str) -> list:
+    return []
+
 def coverage(text: str) -> float:
     """Returns the percentage of (unique) words from the given text that are in the frequency list."""
     words = set(text.split(' '))
